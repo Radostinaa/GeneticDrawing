@@ -11,5 +11,10 @@ int main(int argc, char *argv[])
 
 	sdl.drawImage("../Images/cookie_monster.png");
 	sdl.update();
+
+	sdl.drawTirangle({ { 10,10 },{ 20, 20 },{ 100,20 } }, { 255, 0, 0 });
+
+	sdl.update();
+	while (1) { SDL_Delay(1); }
 	return 0;
 }

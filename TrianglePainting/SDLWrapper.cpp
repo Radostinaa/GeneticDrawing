@@ -71,74 +71,80 @@ void SDLWrapper::drawImage(char* path)
 }
 
 
-void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, Color& color)
+void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
 {
 	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, 0);
 	SDL_RenderDrawLine(render, from.x, from.y, to.x, to.y);
 }
 
-void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
+void swapIf(Vector2& v1, Vector2& v2)
 {
-	Vector2 temp();	if (v1.y < v2.y) 
+	Vector2 temp(0, 0);
+	if (v2 <= v1)
 	{
-		if (v2.y < v3.y)
-		{
-			temp
-		}
+		temp = v1;
+		v1 = v2;
+		v2 = temp;
 	}
 }
 
-void SDLWrapper::drawTirangle(Vector2& v1, Vector2& v2, Vector2& v3, Color& color)
+void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
+{
+	swapIf(v1, v2);
+	swapIf(v2, v3);
+	swapIf(v1, v3);
+}
+
+void SDLWrapper::drawTirangle(Triangle t, const Color& color)
 {
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
-	sortVerticesAscendingByY(v1, v2, v3);
+	sortVerticesAscendingByY(t.v1, t.v2, t.v3);
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
-	if (v2.y == v3.y)
+	if (t.v2.y == t.v3.y)
 	{
-		fillBottomFlatTriangle(v1, v2, v3, color);
+		fillBottomFlatTriangle({ t.v1, t.v2, t.v3 }, color);
 	}
 	/* check for trivial case of top-flat triangle */
-	else if (v1.y == v2.y)
+	else if (t.v1.y == t.v2.y)
 	{
-		fillTopFlatTriangle(v1, v2, v3, color);
+		fillTopFlatTriangle({ t.v1, t.v2, t.v3 }, color);
 	}
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
 		Vector2 v4 = Vector2(
-			(int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
-		fillBottomFlatTriangle( v1, v2, v4, color);
-		fillTopFlatTriangle(v2, v4, v3, color);
+			(int)(t.v1.x + ((float)(t.v2.y - t.v1.y) / (float)(t.v3.y - t.v1.y)) * (t.v3.x - t.v1.x)), t.v2.y);
+		fillBottomFlatTriangle({ t.v1, t.v2, v4 }, color);
+		fillTopFlatTriangle({ t.v2, v4, t.v3 }, color);
 	}
 }
 
-void fillBottomFlatTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color &color)
+void SDLWrapper::fillBottomFlatTriangle(const Triangle& t, const Color & color)
 {
-	float invslope1 = (v2.x - v1.x) / (v2.y - v1.y);
-	float invslope2 = (v3.x - v1.x) / (v3.y - v1.y);
+	float invslope1 = (t.v2.x - t.v1.x) / (t.v2.y - t.v1.y);
+	float invslope2 = (t.v3.x - t.v1.x) / (t.v3.y - t.v1.y);
 
-	float curx1 = v1.x;
-	float curx2 = v1.x;
+	float curx1 = t.v1.x;
+	float curx2 = t.v1.x;
 
-	for (int scanlineY = v1.y; scanlineY <= v2.y; scanlineY++)
+	for (int scanlineY = t.v1.y; scanlineY <= t.v2.y; scanlineY++)
 	{
-		drawLine(Vector2( (int)curx1, scanlineY), Vector2((int)curx2, scanlineY), color);
+		drawLine(Vector2((int)curx1, scanlineY), Vector2((int)curx2, scanlineY), color);
 		curx1 += invslope1;
 		curx2 += invslope2;
 	}
 }
-
-void fillTopFlatTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color &color)
+void SDLWrapper::fillTopFlatTriangle(const Triangle& t, const Color & color)
 {
-	float invslope1 = (v3.x - v1.x) / (v3.y - v1.y);
-	float invslope2 = (v3.x - v2.x) / (v3.y - v2.y);
+	float invslope1 = (t.v3.x - t.v1.x) / (t.v3.y - t.v1.y);
+	float invslope2 = (t.v3.x - t.v2.x) / (t.v3.y - t.v2.y);
 
-	float curx1 = v3.x;
-	float curx2 = v3.x;
+	float curx1 = t.v3.x;
+	float curx2 = t.v3.x;
 
-	for (int scanlineY = v3.y; scanlineY > v1.y; scanlineY--)
+	for (int scanlineY = t.v3.y; scanlineY > t.v1.y; scanlineY--)
 	{
 		drawLine(Vector2((int)curx1, scanlineY), Vector2((int)curx2, scanlineY), color);
 		curx1 -= invslope1;

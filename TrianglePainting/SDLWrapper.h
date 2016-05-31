@@ -3,6 +3,13 @@
 #include <SDL_image.h>
 #include "Vector.h"
 
+struct Triangle
+{
+	Vector2 v1, v2, v3;
+	Triangle(Vector2 _v1, Vector2 _v2, Vector2 _v3) : v1(_v1), v2(_v2), v3(_v3) {}
+};
+
+
 class SDLWrapper
 {
 private:
@@ -25,6 +32,11 @@ public:
 
 	void drawImage(char* path);
 
-	void drawTirangle(Vector2& v1, Vector2& v2, Vector2& v3, Color& color);
-	void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, Color& color);
+	void drawTirangle(Triangle t, const Color& color);
+	void drawLine(const Vector2& from, const Vector2& to, const Color& color);
+
+private:
+
+	void fillTopFlatTriangle(const Triangle& t, const Color &color);
+	void fillBottomFlatTriangle(const Triangle& t, const Color &color);
 };
