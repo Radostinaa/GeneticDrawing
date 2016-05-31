@@ -29,6 +29,17 @@ inline Vector2 operator - (const Vector2& a, const Vector2& b)
 	return Vector2(a.x - b.x, a.y - b.y);
 }
 
+inline bool operator <= (const Vector2& a, const Vector2& b)
+{
+	return a.y <= b.y;
+}
+
+
+inline bool operator >= (const Vector2& a, const Vector2& b)
+{
+	return a.y >= b.y;
+}
+
 /// cross product
 inline Vector2 operator ^ (const Vector2& a, const Vector2& b)
 {
@@ -42,9 +53,9 @@ inline Vector2 operator ^ (const Vector2& a, const Vector2& b)
 class Color
 {
 public:
-	double r, g, b;
+	Uint8 r, g, b;
 
-	Color(const double _r, const double _g, const double _b) : r(_r), g(_g), b(_b) {}
+	Color(const Uint8 _r, const Uint8 _g, const Uint8 _b) : r(_r), g(_g), b(_b) {}
 
 };
 
