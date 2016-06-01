@@ -24,6 +24,9 @@ public:
 	~SDLWrapper();
 	bool initSDL();
 
+	int getWidth(){ return width; }
+	int getHeight(){ return height; }
+
 	bool Quit(){ return quit; };
 	void checkForEvent();
 

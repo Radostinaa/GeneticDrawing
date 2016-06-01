@@ -62,8 +62,8 @@ void SDLWrapper::drawImage(char* path)
 	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, image);
 
 	SDL_Rect rect;
-	rect.w = height/2 - 20;
-	rect.h = width/2;
+	rect.w = width / 2;
+	rect.h = width / 2;
 	rect.x = 0;
 	rect.y = 0;
 
@@ -73,7 +73,8 @@ void SDLWrapper::drawImage(char* path)
 
 void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
 {
-	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, 0);
+	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, color.a);
+	SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
 	SDL_RenderDrawLine(render, from.x, from.y, to.x, to.y);
 }
 
