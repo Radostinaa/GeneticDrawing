@@ -1,5 +1,5 @@
 #pragma once
-
+#include<SDL.h>
 class Vector2
 {
 public:
@@ -73,5 +73,6 @@ inline Color operator - (const Color& a, const Color& b)
 struct Triangle
 {
 	Vector2 v1, v2, v3;
-	Triangle(Vector2 _v1, Vector2 _v2, Vector2 _v3) : v1(_v1), v2(_v2), v3(_v3) {}
+	Color color;
+	Triangle(Vector2 _v1, Vector2 _v2, Vector2 _v3, Color _color) : v1(_v1), v2(_v2), v3(_v3), color(_color) {}
 };
