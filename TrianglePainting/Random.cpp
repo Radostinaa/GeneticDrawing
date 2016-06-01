@@ -12,7 +12,7 @@ inline Vector2 Random::getRandomCoordinate(int width, int height)
 }
 
 
-inline Triangle Random::getRandomTriangle(int width, int height)
+Triangle Random::getRandomTriangle(int width, int height)
 {
 	Vector2 v1 = getRandomCoordinate(width, height);
 	Vector2 v2 = getRandomCoordinate(width, height);
