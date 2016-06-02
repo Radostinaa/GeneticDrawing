@@ -93,7 +93,7 @@ void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
 {
 	swapIf(v1, v2);
 	swapIf(v2, v3);
-	swapIf(v1, v3);
+	swapIf(v1, v2);
 }
 
 void SDLWrapper::drawTirangle(Triangle t)
