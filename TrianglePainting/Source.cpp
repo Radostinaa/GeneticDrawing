@@ -2,43 +2,34 @@
 #include <stdio.h>
 #include<vector>
 #include "Random.h"
+#include "Image.h"
 
-int MaxTriangles = 50;
+int MaxTriangles = 20;
+int genSize = 20;
+SDLWrapper sdl(900, 500);
 
 int main(int argc, char *argv[])
 {
-	SDLWrapper sdl(900, 500);
 	if (!sdl.initSDL())
 	{
 		return -1;
 	}
 
-	sdl.drawImage("../Images/cookie_monster.png");
-	sdl.update();
+	SDL_Surface* original = sdl.drawImageFromPath("../Images/cookie_monster.png");
 
-	//sdl.drawTirangle({ { 500,10 },{ 200, 200 },{ 100,200 } }, { 255, 0, 0 , 10});
+	Image image(original->w, original->h);
 
-	std::vector<Triangle> triangles;
 	Random rnd;
 	for (int i = 0; i < MaxTriangles; i++)
 	{
-		Triangle tr = rnd.getRandomTriangle(500, 500);
-		triangles.push_back(tr);
+		Triangle tr = rnd.getRandomTriangle(450, 450);
+		image.triangles.push_back(tr);
 	}
-
-	for (auto tr : triangles)
-	{
-		sdl.drawTirangle(tr);
-	}
-
-	sdl.update();
+	image.getImage();
+	sdl.drawImage(image);
 
 
 	while (1) { SDL_Delay(1); }
 	return 0;
 }
 
-void GenerateFirstGeneration()
-{
-
-}
