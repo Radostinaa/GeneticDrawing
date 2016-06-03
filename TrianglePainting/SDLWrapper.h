@@ -2,14 +2,16 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Vector.h"
+#include <vector>
+#include "Image.h"
 
 class SDLWrapper
 {
 private:
 	int width;
 	int height;
-	SDL_Window * window;
-	SDL_Renderer * render;
+	SDL_Window* window;
+	SDL_Renderer* render;
 	bool quit;
 
 public:
@@ -23,16 +25,11 @@ public:
 	bool Quit(){ return quit; };
 	void checkForEvent();
 
-	void update() { SDL_RenderPresent(render); }
 	void setWinTitle(const char * title) { SDL_SetWindowTitle(window, title); }
 
-	void drawImage(char* path);
-
-	void drawTirangle(Triangle t);
-	void drawLine(const Vector2& from, const Vector2& to, const Color& color);
+	SDL_Surface* drawImageFromPath(char* path);
+	void drawImage(Image img);
 
 private:
-
-	void fillTopFlatTriangle(const Triangle& t);
-	void fillBottomFlatTriangle(const Triangle& t);
+	void update() { SDL_RenderPresent(render); }
 };

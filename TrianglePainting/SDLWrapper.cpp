@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <algorithm> 
+#include <vector>
 
 SDLWrapper::SDLWrapper(const int width, const int height) : width(width), height(height),
 	quit(false) ,window(NULL), render(NULL){}
@@ -50,7 +51,7 @@ bool SDLWrapper::initSDL()
 	return true;
 }
 
-void SDLWrapper::drawImage(char* path)
+SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 {
 	SDL_Surface *image;
 	image = IMG_Load(path);
@@ -60,7 +61,7 @@ void SDLWrapper::drawImage(char* path)
 	}
 
 	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, image);
-
+	
 	SDL_Rect rect;
 	rect.w = width / 2;
 	rect.h = width / 2;
@@ -68,89 +69,34 @@ void SDLWrapper::drawImage(char* path)
 	rect.y = 0;
 
 	SDL_RenderCopy(render, texture, NULL, &rect);
+	update();
+	return image;
 }
 
-
-void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
+void SDLWrapper::drawImage(Image img)
 {
-	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, color.a);
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, img.surface);
+
+	SDL_Rect rect;
+	rect.w = width / 2;
+	rect.h = width / 2;
+	rect.x = width / 2;;
+	rect.y = 0;
+
 	SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
-	SDL_RenderDrawLine(render, from.x, from.y, to.x, to.y);
+	SDL_RenderCopy(render, texture, NULL, &rect);
+	update();
 }
 
-void swapIf(Vector2& v1, Vector2& v2)
-{
-	Vector2 temp(0, 0);
-	if (v2 <= v1)
-	{
-		temp = v1;
-		v1 = v2;
-		v2 = temp;
-	}
-}
 
-void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
-{
-	swapIf(v1, v2);
-	swapIf(v2, v3);
-	swapIf(v1, v2);
-}
+//void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
+//{
+//	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, color.a);
+//	SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
+//	SDL_RenderDrawLine(render, from.x, from.y, to.x, to.y);
+//}
 
-void SDLWrapper::drawTirangle(Triangle t)
-{
-	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
-	sortVerticesAscendingByY(t.v1, t.v2, t.v3);
 
-	/* here we know that v1.y <= v2.y <= v3.y */
-	/* check for trivial case of bottom-flat triangle */
-	if (t.v2.y == t.v3.y)
-	{
-		fillBottomFlatTriangle({ t.v1, t.v2, t.v3, t.color });
-	}
-	/* check for trivial case of top-flat triangle */
-	else if (t.v1.y == t.v2.y)
-	{
-		fillTopFlatTriangle({ t.v1, t.v2, t.v3, t.color });
-	}
-	else
-	{
-		/* general case - split the triangle in a topflat and bottom-flat one */
-		Vector2 v4 = Vector2(
-			(int)(t.v1.x + ((float)(t.v2.y - t.v1.y) / (float)(t.v3.y - t.v1.y)) * (t.v3.x - t.v1.x)), t.v2.y);
-		fillBottomFlatTriangle({ t.v1, t.v2, v4, t.color });
-		fillTopFlatTriangle({ t.v2, v4, t.v3, t.color });
-	}
-}
 
-void SDLWrapper::fillBottomFlatTriangle(const Triangle& t)
-{
-	float invslope1 = (t.v2.x - t.v1.x) / (t.v2.y - t.v1.y);
-	float invslope2 = (t.v3.x - t.v1.x) / (t.v3.y - t.v1.y);
-
-	float curx1 = t.v1.x;
-	float curx2 = t.v1.x;
-
-	for (int scanlineY = t.v1.y; scanlineY <= t.v2.y; scanlineY++)
-	{
-		drawLine(Vector2((int)curx1, scanlineY), Vector2((int)curx2, scanlineY), t.color);
-		curx1 += invslope1;
-		curx2 += invslope2;
-	}
-}
-void SDLWrapper::fillTopFlatTriangle(const Triangle& t)
-{
-	float invslope1 = (t.v3.x - t.v1.x) / (t.v3.y - t.v1.y);
-	float invslope2 = (t.v3.x - t.v2.x) / (t.v3.y - t.v2.y);
-
-	float curx1 = t.v3.x;
-	float curx2 = t.v3.x;
-
-	for (int scanlineY = t.v3.y; scanlineY > t.v1.y; scanlineY--)
-	{
-		drawLine(Vector2((int)curx1, scanlineY), Vector2((int)curx2, scanlineY), t.color);
-		curx1 -= invslope1;
-		curx2 -= invslope2;
-	}
-}
 
 
