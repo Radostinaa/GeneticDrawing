@@ -57,7 +57,15 @@ public:
 
 	Color(const Uint8 _r, const Uint8 _g, const Uint8 _b, const Uint8 _a) : r(_r), g(_g), b(_b), a(_a) {}
 
+	operator Uint8() {
+		Uint8 val = a;
+		val = val | r << 24;
+		val = val | g << 16;
+		val = val | b << 8;
+		return val;
+	}
 };
+
 
 inline Color operator + (const Color& a, const Color& b)
 {
