@@ -29,7 +29,13 @@ public:
 
 	SDL_Surface* drawImageFromPath(char* path);
 	void drawImage(Image img);
-
+	/*void drawTirangle(Triangle t);*/
 private:
 	void update() { SDL_RenderPresent(render); }
+	//void drawLine(const Vector2& from, const Vector2& to, const Color& color);
+
+	//void fillBottomFlatTriangle(const Triangle& t);
+	//void fillTopFlatTriangle(const Triangle& t);
+
+	//void tr(Triangle& t);
 };

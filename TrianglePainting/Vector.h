@@ -1,5 +1,6 @@
 #pragma once
 #include<SDL.h>
+#include<iostream>
 class Vector2
 {
 public:
@@ -57,11 +58,8 @@ public:
 
 	Color(const Uint8 _r, const Uint8 _g, const Uint8 _b, const Uint8 _a) : r(_r), g(_g), b(_b), a(_a) {}
 
-	operator Uint8() {
-		Uint8 val = a;
-		val = val | r << 24;
-		val = val | g << 16;
-		val = val | b << 8;
+	operator Uint32() {
+		Uint32 val = *(Uint32*)this;
 		return val;
 	}
 };
@@ -69,7 +67,14 @@ public:
 
 inline Color operator + (const Color& a, const Color& b)
 {
-	return Color(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
+	Uint8 ra = a.a + b.a*(1 - a.a);
+
+	Uint8 rr = (a.r * a.a + b.r * (1 - a.a));
+	Uint8 rg = (a.g * a.a + b.g * (1 - a.a));
+	Uint8 rb = (a.b * a.a + b.b * (1 - a.a));
+
+	return Color(rr, rg, rb, ra);
+
 }
 
 inline Color operator - (const Color& a, const Color& b)
@@ -77,6 +82,10 @@ inline Color operator - (const Color& a, const Color& b)
 	return Color(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
 }
 
+inline Color operator / (const Color& a, int divider)
+{
+	return Color(a.r / divider, a.g / divider, a.b / divider, a.a / divider);
+}
 
 struct Triangle
 {

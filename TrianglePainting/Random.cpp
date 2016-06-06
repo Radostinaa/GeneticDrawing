@@ -23,7 +23,8 @@ Triangle Random::getRandomTriangle(int width, int height)
 
 inline Color Random::getRandomColor()
 {
-	std::uniform_int_distribution<int> distA(25, 153);
+	/*std::mt19937_64 _generator(5);*/
+	/*std::uniform_int_distribution<int> distA(25, 153);
 	Uint8 a = distA(generator);
 
 	std::uniform_int_distribution<int> distRGB(0, 255);
@@ -31,7 +32,9 @@ inline Color Random::getRandomColor()
 
 	Uint8 g = distRGB(generator);
 
-	Uint8 b = distRGB(generator);
+	Uint8 b = distRGB(generator);*/
 
-	return Color(r, g, b, a);
+
+	/*return Color(r, g, b, a);*/
+	return Color(255, 255, 255, 100);
 }

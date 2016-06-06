@@ -4,7 +4,7 @@
 #include "Random.h"
 #include "Image.h"
 
-int MaxTriangles = 20;
+int MaxTriangles = 5;
 int genSize = 20;
 SDLWrapper sdl(900, 500);
 
@@ -28,6 +28,11 @@ int main(int argc, char *argv[])
 	image.getImage();
 	sdl.drawImage(image);
 
+	//for (int i = 0; i < MaxTriangles; i++)
+	//{
+	//	sdl.drawTirangle(rnd.getRandomTriangle(450, 450));
+	//}
+	//
 
 	while (1) { SDL_Delay(1); }
 	return 0;
