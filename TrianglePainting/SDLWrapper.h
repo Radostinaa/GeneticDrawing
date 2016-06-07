@@ -30,6 +30,7 @@ public:
 
 	SDL_Surface* drawImageFromPath(char* path);
 	void drawImage(Image img);
+	void drawLine(const Vector2& from, const Vector2& to, const Color& color);
 
 private:
 	void update() { SDL_RenderPresent(render); }

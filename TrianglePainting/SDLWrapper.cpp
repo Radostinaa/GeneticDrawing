@@ -89,3 +89,11 @@ void SDLWrapper::drawImage(Image img)
 	SDL_RenderCopy(render, texture, NULL, &rect);
 	update();
 }
+
+void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
+{
+	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, color.a);
+	SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
+	SDL_RenderDrawLine(render, from.x + width/2, from.y, to.x + width / 2, to.y);
+	update();
+}
