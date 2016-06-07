@@ -101,6 +101,15 @@ inline Color operator / (const Color& a, int divider)
 	return Color(a.r / divider, a.g / divider, a.b / divider, a.a / divider);
 }
 
+inline double Colorfitness(Color c1, Color c2)
+{
+	double r = c1.r - c2.r;
+	double g = c1.g - c2.g;
+	double b = c1.g - c2.g;
+
+	return 0.299 * r*r + 0.587 * g*g + 0.114 * b*b;
+}
+
 struct Triangle
 {
 	Vector2 v1, v2, v3;
