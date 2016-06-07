@@ -33,6 +33,5 @@ inline Color Random::getRandomColor()
 
 	Uint8 b = distRGB(generator);
 
-
 	return Color(r, g, b, a);
 }

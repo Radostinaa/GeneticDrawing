@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GA.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SDLWrapper.cpp" />
