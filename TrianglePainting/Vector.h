@@ -43,6 +43,12 @@ inline bool operator >= (const Vector2& a, const Vector2& b)
 	return a.y >= b.y;
 }
 
+inline bool operator == (const Vector2& a, const Vector2& b)
+{
+	return a.y == b.y && a.x == b.x;
+}
+
+
 /// cross product
 inline Vector2 operator ^ (const Vector2& a, const Vector2& b)
 {
