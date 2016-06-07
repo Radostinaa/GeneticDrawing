@@ -25,14 +25,10 @@ int main(int argc, char *argv[])
 		Triangle tr = rnd.getRandomTriangle(450, 450);
 		image.triangles.push_back(tr);
 	}
+
 	image.getImage();
 	sdl.drawImage(image);
-
-	//for (int i = 0; i < MaxTriangles; i++)
-	//{
-	//	sdl.drawTirangle(rnd.getRandomTriangle(450, 450));
-	//}
-	//
+	
 
 	while (1) { SDL_Delay(1); }
 	return 0;

@@ -4,9 +4,12 @@
 Image::Image(int _width, int _height)
 {
 	this->surface = SDL_CreateRGBSurface(SDL_SWSURFACE, _width, _height, 32,
-		0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+		0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 
 	this->pixels = (Uint32 *)surface->pixels;
+
+	for (int c = 0; c < surface->w * surface->h; ++c)
+		pixels[c] = Color(0, 0, 0, 255);
 }
 
 Uint32 Image::calcPixel(Uint32* pixels, int x, int y, Color color)

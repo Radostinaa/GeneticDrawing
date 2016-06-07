@@ -1,6 +1,8 @@
 #pragma once
 #include<SDL.h>
 #include<iostream>
+#include <algorithm>
+
 class Vector2
 {
 public:
@@ -67,13 +69,25 @@ public:
 
 inline Color operator + (const Color& a, const Color& b)
 {
-	Uint8 ra = a.a + b.a*(1 - a.a);
 
-	Uint8 rr = (a.r * a.a + b.r * (1 - a.a));
-	Uint8 rg = (a.g * a.a + b.g * (1 - a.a));
-	Uint8 rb = (a.b * a.a + b.b * (1 - a.a));
+	float a1 = a.a / 255.0f;
+	float r1 = a.r / 255.0f;
+	float g1 = a.g / 255.0f;
+	float b1 = a.b / 255.0f;
 
-	return Color(rr, rg, rb, ra);
+	float a2 = b.a / 255.0f;
+	float r2 = b.r / 255.0f;
+	float g2 = b.g / 255.0f;
+	float b2 = b.b / 255.0f;
+
+	float inva = 1.0f - a2;
+
+	float sr = (inva * r1) + r2*a2;
+	float sg = (inva * g1) + g2*a2;
+	float sb = (inva * b1) + b2*a2;
+	float sa = (inva * a1) + a2;
+
+	return Color(sr * 255.0f, sg * 255.0f, sb * 255.0f, sa * 255.0f);
 
 }
 

@@ -10,9 +10,10 @@ public:
 	Uint32 * pixels;
 	std::vector<Triangle> triangles;
 	int fitness;
-	Image(int _width, int _height);
 
+	Image(int _width, int _height);
 	SDL_Surface* getImage();
+
 private:
 
 	void drawLine(const Vector2& from, const Vector2& to, const Color& color);
