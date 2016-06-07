@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Vector.h"
-#include<vector>
+#include <vector>
 
 class Image
 {
@@ -9,7 +9,7 @@ public:
 	SDL_Surface* surface;
 	Uint32 * pixels;
 	std::vector<Triangle> triangles;
-	int fitness;
+	double fitness;
 
 	Image(int _width, int _height);
 	SDL_Surface* getImage();

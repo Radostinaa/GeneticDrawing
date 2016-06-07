@@ -43,13 +43,6 @@ void Image::drawLine(const Vector2& from, const Vector2& to, const Color& color)
 	}
 }
 
-//void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
-//{
-//	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, color.a);
-//	SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
-//	SDL_RenderDrawLine(render, from.x, from.y, to.x, to.y);
-//}
-
 void swapIf(Vector2& v1, Vector2& v2)
 {
 	Vector2 temp(0, 0);
