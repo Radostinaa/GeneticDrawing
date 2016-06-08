@@ -36,7 +36,7 @@ inline Color Random::getRandomColor()
 	return Color(r, g, b, a);
 }
 
-int Random::getImageIndex(int from, int to)
+int Random::getIndex(int from, int to)
 {
 	std::uniform_int_distribution<int> distIx(from, to);
 	int i = distIx(generator);

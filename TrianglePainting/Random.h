@@ -13,6 +13,6 @@ private:
 public:
 	Random() : generator(device()){}
 	Triangle getRandomTriangle(int width, int height);
-	int getImageIndex(int from, int to);
+	int getIndex(int from, int to);
 	Vector2 getRandomCoordinate(int width, int height);
 };
