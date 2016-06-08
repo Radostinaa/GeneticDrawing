@@ -7,13 +7,13 @@
 
 std::vector<Image> generation;
 
-void firstGeneration(int width, int height, Random& rnd, int size)
+void firstGeneration(int width, int height, Random& rnd, int genSize, int trSize)
 {
-	for (int c = 0; c < size; ++c){
+	for (int c = 0; c < genSize; ++c){
 
 		Image image(width, height);
 
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < trSize; i++)
 		{
 			Triangle tr = rnd.getRandomTriangle(width, height);
 			image.triangles.push_back(tr);
@@ -37,21 +37,21 @@ void sotrGeneration()
 
 int main(int argc, char *argv[])
 {
-	SDLWrapper sdl(900, 500);
+	SDLWrapper sdl(1200, 600);
 	if (!sdl.initSDL())
 	{
 		return -1;
 	}
 
-	int MaxTriangles = 20;
-	int MaxGenSize = 20;
+	int MaxTriangles = 40;
+	int MaxGenSize = 30;
 	Random rnd;
 
 	SDL_Surface* original = sdl.drawImageFromPath("../Images/tr.png");
 
 	GA ga(MaxTriangles, original);
 
-	firstGeneration(original->w, original->h, rnd, MaxGenSize);
+	firstGeneration(original->w, original->h, rnd, MaxGenSize, MaxTriangles);
 
 	while (!sdl.Quit())
 	{
