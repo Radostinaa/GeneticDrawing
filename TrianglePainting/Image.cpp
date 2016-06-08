@@ -12,6 +12,12 @@ Image::Image(int _width, int _height)
 		pixels[c] = Color(0, 0, 0, 255);
 }
 
+Image::~Image()
+{
+	SDL_FreeSurface(this->surface);
+	pixels = nullptr;
+}
+
 Uint32 Image::calcPixel(Uint32* pixels, int x, int y, Color color)
 {
 	Uint32 * dest = &pixels[(y * (surface->w)) + x];
@@ -61,7 +67,7 @@ void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
 	swapIf(v1, v2);
 }
 
-SDL_Surface* Image::getImage()
+SDL_Surface* Image::generatePixels()
 {
 	for (auto tr : triangles)
 	{
