@@ -1,5 +1,4 @@
 #include "GA.h"
-#include "Random.h"
 
 void GA::fitness(Image& image)
 {
@@ -21,7 +20,6 @@ Image GA::cross(const Image& mother, const Image& fother)
 {
 	Image child(mother.surface->w, mother.surface->h);
 
-	Random rnd;
 	Vector2 p1 = rnd.getRandomCoordinate(mother.surface->w, mother.surface->h);
 	Vector2 p2 = rnd.getRandomCoordinate(mother.surface->w, mother.surface->h);
 
@@ -53,7 +51,7 @@ Image GA::cross(const Image& mother, const Image& fother)
 	int size = child.triangles.size();
 	if (size < trianglesCount)
 	{
-		for (int i = 0; i < trianglesCount - size ; i++)
+		for (int i = 0; i < trianglesCount - size; i++)
 		{
 			child.triangles.push_back(mother.triangles[i]);
 		}
@@ -80,4 +78,16 @@ bool GA::isOnRightPint(const Vector2& p1, const Vector2& p2, const Vector2& p3)
 
 	if (value >= 0) return false;
 	if (value < 0) return true;
+}
+
+
+void GA::mutate(Image& image)
+{
+	int count = rnd.getIndex(1, image.triangles.size() - 1);
+	int ix;
+	for (int i = 0; i < count; i++)
+	{
+		ix = rnd.getIndex(0, image.triangles.size() - 1);
+		image.triangles[ix] = std::move(rnd.getRandomTriangle(image.surface->w, image.surface->h));
+	}
 }

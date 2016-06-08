@@ -15,7 +15,7 @@ void firstGeneration(int width, int height, Random& rnd, int size)
 
 		for (int i = 0; i < size; i++)
 		{
-			Triangle tr = rnd.getRandomTriangle(450, 450);
+			Triangle tr = rnd.getRandomTriangle(width, height);
 			image.triangles.push_back(tr);
 		}
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	int MaxGenSize = 20;
 	Random rnd;
 
-	SDL_Surface* original = sdl.drawImageFromPath("../Images/cookie_monster.png");
+	SDL_Surface* original = sdl.drawImageFromPath("../Images/tr.png");
 
 	GA ga(MaxTriangles, original);
 
@@ -75,22 +75,25 @@ int main(int argc, char *argv[])
 		int m, f;
 		for (int i = MaxGenSize / 10; i < MaxGenSize; i++)
 		{
-			m = rnd.getImageIndex(1, MaxGenSize - 1);
-			f = rnd.getImageIndex(0, m - 1);
+			m = rnd.getIndex(1, MaxGenSize - 1);
+			f = rnd.getIndex(0, m - 1);
 			Vector2 from(0,0), to(0,0);
-			newGen.push_back(ga.cross(generation[m], generation[f]));
+			newGen.push_back(std::move(ga.cross(generation[m], generation[f])));
 			//sdl.drawLine(from, to, Color(255, 0, 0, 255));
-		}
-
-		//mutate
-		for (int i = 0; i < MaxGenSize/5; i++)
-		{
 		}
 
 		//add the best ones
 		for (int i = 0; i < MaxGenSize/10; i++)
 		{
 			newGen.push_back(std::move(generation[i]));
+		}
+
+		//mutate
+		int k;
+		for (int i = 0; i < MaxGenSize; i++)
+		{
+			k = rnd.getIndex(0, 100);
+			if (k < 5) ga.mutate(newGen[i]);
 		}
 
 		generation = std::move(newGen);
