@@ -59,7 +59,7 @@ Image GA::cross(const Image& mother, const Image& fother)
 		}
 	}
 
-	child.getImage();
+	child.generatePixels();
 
 	return child;
 }
