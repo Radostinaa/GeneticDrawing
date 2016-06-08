@@ -20,6 +20,7 @@ public:
 	~SDLWrapper();
 	bool initSDL();
 
+	void clear() { SDL_SetRenderDrawColor(render, 0, 0, 0, 0); SDL_RenderClear(render); }
 	int getWidth(){ return width; }
 	int getHeight(){ return height; }
 
@@ -29,7 +30,7 @@ public:
 	void setWinTitle(const char * title) { SDL_SetWindowTitle(window, title); }
 
 	SDL_Surface* drawImageFromPath(char* path);
-	void drawImage(Image img);
+	void drawImage(SDL_Surface *image, bool original);
 	void drawLine(const Vector2& from, const Vector2& to, const Color& color);
 
 private:

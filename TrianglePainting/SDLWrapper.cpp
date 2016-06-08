@@ -75,15 +75,15 @@ SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 	return image;
 }
 
-void SDLWrapper::drawImage(Image img)
+void SDLWrapper::drawImage(SDL_Surface *image, bool original)
 {
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, img.surface);
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, image);
 
 
 	SDL_Rect rect;
-	rect.w = img.surface->w;
-	rect.h = img.surface->h;
-	rect.x = width / 2;;
+	rect.w = original ? width / 2 : image->w;
+	rect.h = original ? width / 2 : image->h;
+	rect.x = original ? 0 : width / 2;;
 	rect.y = 0;
 
 	SDL_RenderCopy(render, texture, NULL, &rect);

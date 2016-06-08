@@ -5,31 +5,23 @@
 #include "Image.h"
 #include "GA.h"
 
-int MaxTriangles = 5;
-int MaxGenSize = 20;
-int genSize = 20;
-SDLWrapper sdl(900, 500);
-Random rnd;
-
 std::vector<Image> generation;
-SDL_Surface* original;
 
-
-void firstGeneration()
+void firstGeneration(int width, int height, Random& rnd, int size)
 {
-	for (int c = 0; c < MaxGenSize; ++c){
+	for (int c = 0; c < size; ++c){
 
-		Image image(original->w, original->h);
+		Image image(width, height);
 
-		for (int i = 0; i < MaxTriangles; i++)
+		for (int i = 0; i < size; i++)
 		{
 			Triangle tr = rnd.getRandomTriangle(450, 450);
 			image.triangles.push_back(tr);
 		}
 
-		image.getImage();
+		image.generatePixels();
 
-		generation.push_back(image);
+		generation.push_back(std::move(image));
 	}
 }
 
@@ -45,20 +37,27 @@ void sotrGeneration()
 
 int main(int argc, char *argv[])
 {
+	SDLWrapper sdl(900, 500);
 	if (!sdl.initSDL())
 	{
 		return -1;
 	}
 
-	original = sdl.drawImageFromPath("../Images/cookie_monster.png");
+	int MaxTriangles = 20;
+	int MaxGenSize = 20;
+	Random rnd;
+
+	SDL_Surface* original = sdl.drawImageFromPath("../Images/cookie_monster.png");
 
 	GA ga(MaxTriangles, original);
 
-	firstGeneration();
+	firstGeneration(original->w, original->h, rnd, MaxGenSize);
 
-	//
 	while (!sdl.Quit())
 	{
+		sdl.clear();
+		sdl.drawImage(original, true);
+
 		//get fitness
 		for (auto &img : generation)
 		{
@@ -68,15 +67,9 @@ int main(int argc, char *argv[])
 		sotrGeneration();
 
 		//draw first image
-		sdl.drawImage(generation[0]);
+		sdl.drawImage(generation[0].surface, false);
 
 		std::vector<Image> newGen;
-
-		//add the best ones
-		for (int i = 0; i < MaxGenSize/10; i++)
-		{
-			newGen.push_back(generation[i]);
-		}
 
 		//cross
 		int m, f;
@@ -86,7 +79,6 @@ int main(int argc, char *argv[])
 			f = rnd.getImageIndex(0, m - 1);
 			Vector2 from(0,0), to(0,0);
 			newGen.push_back(ga.cross(generation[m], generation[f]));
-
 			//sdl.drawLine(from, to, Color(255, 0, 0, 255));
 		}
 
@@ -95,13 +87,18 @@ int main(int argc, char *argv[])
 		{
 		}
 
-		generation = newGen;
+		//add the best ones
+		for (int i = 0; i < MaxGenSize/10; i++)
+		{
+			newGen.push_back(std::move(generation[i]));
+		}
+
+		generation = std::move(newGen);
+
 		sdl.checkForEvent();
 
 	}
 
-
-	//while (1) { SDL_Delay(1); }
 	return 0;
 }
 
