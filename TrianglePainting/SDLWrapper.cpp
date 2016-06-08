@@ -6,7 +6,7 @@
 #include <vector>
 
 SDLWrapper::SDLWrapper(const int width, const int height) : width(width), height(height),
-	quit(false) ,window(NULL), render(NULL){}
+quit(false), window(NULL), render(NULL){}
 
 
 SDLWrapper::~SDLWrapper()
@@ -14,7 +14,7 @@ SDLWrapper::~SDLWrapper()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(render);
 	SDL_Quit();
-} 
+}
 
 void SDLWrapper::checkForEvent()
 {
@@ -35,7 +35,7 @@ bool SDLWrapper::initSDL()
 
 	window = SDL_CreateWindow("nana", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		width, height, SDL_WINDOW_SHOWN);
-	
+
 	screen = SDL_GetWindowSurface(window);
 	if (!window)
 	{
@@ -63,7 +63,7 @@ SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 	}
 
 	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, image);
-	
+
 	SDL_Rect rect;
 	rect.w = width / 2;
 	rect.h = width / 2;
@@ -81,8 +81,8 @@ void SDLWrapper::drawImage(SDL_Surface *image, bool original)
 
 
 	SDL_Rect rect;
-	rect.w = original ? width / 2 : image->w;
-	rect.h = original ? width / 2 : image->h;
+	rect.w = width / 2;
+	rect.h = width / 2;
 	rect.x = original ? 0 : width / 2;;
 	rect.y = 0;
 
@@ -94,6 +94,6 @@ void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& c
 {
 	SDL_SetRenderDrawColor(render, color.r, color.g, color.b, color.a);
 	SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
-	SDL_RenderDrawLine(render, from.x + width/2, from.y, to.x + width / 2, to.y);
+	SDL_RenderDrawLine(render, from.x + width / 2, from.y, to.x + width / 2, to.y);
 	update();
 }
