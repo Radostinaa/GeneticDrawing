@@ -62,11 +62,12 @@ SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 		printf(" nananaan %s\n", IMG_GetError());
 	}
 
+
 	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, image);
 
 	SDL_Rect rect;
-	rect.w = width / 2;
-	rect.h = width / 2;
+	rect.w = image->w; // width / 2;
+	rect.h = image->h; // width / 2;
 	rect.x = 0;
 	rect.y = 0;
 
@@ -81,8 +82,8 @@ void SDLWrapper::drawImage(SDL_Surface *image, bool original)
 
 
 	SDL_Rect rect;
-	rect.w = width / 2;
-	rect.h = width / 2;
+	rect.w = image->w; // width / 2;
+	rect.h = image->h; //width / 2;
 	rect.x = original ? 0 : width / 2;;
 	rect.y = 0;
 
