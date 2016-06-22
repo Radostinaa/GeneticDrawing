@@ -33,6 +33,7 @@ public:
 		std::swap(this->fitness, o.fitness);
 		std::swap(this->surface, o.surface);
 
+		SDL_FreeSurface(o.surface);
 		return *this;
 	}
 

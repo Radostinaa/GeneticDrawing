@@ -1,11 +1,11 @@
 #pragma once
 #include <random>
 #include "Vector.h"
+std::random_device device;
 
 class Random
 {
 private:
-	std::random_device device;
 	std::mt19937_64 generator;
 
 	Color getRandomColor();

@@ -15,6 +15,7 @@ public:
 	void fitness(Image& image);
 	Image cross(const Image& mother, const Image& fother);
 	void mutate(Image& image);
+	
 
 private:
 	int trianglesCount;

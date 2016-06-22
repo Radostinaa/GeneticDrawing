@@ -29,7 +29,7 @@ Image GA::cross(const Image& mother, const Image& fother)
 
 	for (auto tr : mother.triangles)
 	{
-		if (count > trianglesCount) break;
+		if (count >= trianglesCount) break;
 		if (isOnRightTriangle(tr, p1, p2))
 		{
 			child.triangles.push_back(tr);
@@ -40,7 +40,7 @@ Image GA::cross(const Image& mother, const Image& fother)
 
 	for (auto tr : fother.triangles)
 	{
-		if (count > trianglesCount) break;
+		if (count >= trianglesCount) break;
 		if (isOnRightTriangle(tr, p1, p2))
 		{
 			child.triangles.push_back(tr);
