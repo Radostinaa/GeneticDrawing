@@ -15,6 +15,7 @@ Image::Image(int _width, int _height)
 Image::~Image()
 {
 	SDL_FreeSurface(this->surface);
+	this->surface = nullptr;
 	pixels = nullptr;
 }
 
