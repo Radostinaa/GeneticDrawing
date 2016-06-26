@@ -18,7 +18,7 @@ public:
 
 	Random rnd;
 };
-std::vector<Image> generation;
+
 void firstGeneration(int width, int height, Random& rnd, int genSize, int trSize, std::vector<Image>& generation)
 {
 	for (int c = 0; c < genSize; ++c){
@@ -51,22 +51,20 @@ void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 {
 	//cross
 	int m, f;
-	for (int i = from; i < size; i++)
+	for (int i = from; i < from + size; i++)
 	{
-		m = ut.rnd.getIndex(from + 1, size - 1);
-		f = ut.rnd.getIndex(from, m - 1);
-		Vector2 from(0, 0), to(0, 0);
+		m = ut.rnd.getIndex(1, ut.GenSize-1);
+		f = ut.rnd.getIndex(0, m - 1);
 		newGen.push_back(std::move(ga.cross(ut.generation[m], ut.generation[f])));
 	}
 
 	//mutate
 	int k;
-	for (int i = from; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		k = ut.rnd.getIndex(0, 100);
 		if (k < 5) ga.mutate(newGen[i]);
 	}
-
 }
 
 
@@ -79,7 +77,7 @@ int main(int argc, char *argv[])
 	}
 
 	Random rnd;
-	Utils ut(30, 40);
+	Utils ut(40, 40);
 
 	SDL_Surface* original = sdl.drawImageFromPath("../Images/tr.png");
 
@@ -91,13 +89,14 @@ int main(int argc, char *argv[])
 
 	firstGeneration(original->w, original->h, rnd, ut.GenSize, ut.MaxTriangles, ut.generation);
 
+	int cg = 0;
 	while (!sdl.Quit())
 	{
 		sdl.clear();
 		sdl.drawImage(original, true);
 
 		//get fitness
-		for (auto &img : generation)
+		for (auto &img : ut.generation)
 		{
 			ga.fitness(img);
 		}
@@ -105,30 +104,39 @@ int main(int argc, char *argv[])
 		sotrGeneration(ut.generation);
 
 		//draw best image
-		sdl.drawImage(generation[0].surface, false);
+		sdl.drawImage(ut.generation[0].surface, false);
 
-		std::vector<Image> newGen;
-		newGen.reserve(ut.GenSize);
+		std::vector<std::vector<Image>> newGens(thCount);
 
-		for (int i = 0; i < thCount - 1; i++)
+		for (int i = 0; i < thCount; i++)
 		{
-			threads[i] = std::thread(bla, ut.GenSize / thCount, i*(ut.GenSize / thCount), newGen, ga, ut);
+			auto sz = ut.GenSize / thCount;
+			threads[i] = std::thread(bla, i*(ut.GenSize / thCount), sz, std::ref(newGens[i]), std::ref(ga), std::ref(ut));
 		}
 
-		for (int i = 0; i < thCount - 1; i++)
+		for (int i = 0; i < thCount; i++)
 		{
 			threads[i].join();
 		}
 
 		//add the best ones
+		std::vector<Image> newGen;
+		newGen.reserve(ut.GenSize);
+
+		for (auto & subGen : newGens) {
+			for (auto & img : subGen) {
+				newGen.push_back(std::move(img));
+			}
+		}
 		for (int i = 0; i < ut.GenSize / 10; i++)
 		{
-			newGen.push_back(std::move(generation[i]));
+			newGen[i] = std::move(ut.generation[i]);
 		}
-		generation = std::move(newGen);
+		ut.generation.swap(newGen);
 
 		sdl.checkForEvent();
 
+		printf("Generation %d\n", cg++);
 	}
 
 	return 0;

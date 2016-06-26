@@ -19,6 +19,7 @@ void GA::fitness(Image& image)
 Image GA::cross(const Image& mother, const Image& fother)
 {
 	Image child(mother.surface->w, mother.surface->h);
+	child.triangles.reserve(trianglesCount);
 
 	Vector2 p1 = rnd.getRandomCoordinate(mother.surface->w, mother.surface->h);
 	Vector2 p2 = rnd.getRandomCoordinate(mother.surface->w, mother.surface->h);
@@ -27,7 +28,7 @@ Image GA::cross(const Image& mother, const Image& fother)
 
 	int count = 0;
 
-	for (auto tr : mother.triangles)
+	for (auto & tr : mother.triangles)
 	{
 		if (count >= trianglesCount) break;
 		if (isOnRightTriangle(tr, p1, p2))
@@ -38,7 +39,7 @@ Image GA::cross(const Image& mother, const Image& fother)
 	}
 
 
-	for (auto tr : fother.triangles)
+	for (auto & tr : fother.triangles)
 	{
 		if (count >= trianglesCount) break;
 		if (isOnRightTriangle(tr, p1, p2))
