@@ -67,15 +67,6 @@ void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 	}
 }
 
-
-void  getFitness(int from, int size, GA& ga, Utils& ut)
-{
-	for (int i = from; i < from + size; i++)
-	{
-		ga.fitness(ut.generation[i]);
-	}
-}
-
 int main(int argc, char *argv[])
 {
 	SDLWrapper sdl(1200, 600);
@@ -87,7 +78,7 @@ int main(int argc, char *argv[])
 	Random rnd;
 	Utils ut(40, 40);
 
-	SDL_Surface* original = sdl.drawImageFromPath("../Images/tr.png");
+	SDL_Surface* original = sdl.drawImageFromPath("../Images/cookie_monster.png");
 
 	GA ga(ut.MaxTriangles, original);
 
@@ -112,13 +103,9 @@ int main(int argc, char *argv[])
 		}
 
 		//get fitness
-		for (int i = 0; i < thCount; i++)
+		for (auto &img : ut.generation) 
 		{
-			threads[i] = std::thread(getFitness, i*sz, sz, std::ref(ga), std::ref(ut));
-		}
-		for (int i = 0; i < thCount; i++)
-		{
-			threads[i].join();
+			ga.fitness(img);
 		}
 		sotrGeneration(ut.generation);
 

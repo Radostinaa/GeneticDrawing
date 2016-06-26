@@ -101,7 +101,7 @@ void Image::drawTirangle(Triangle t)
 
 void Image::fillBottomFlatTriangle(const Triangle& t)
 {
-	float invslope1 = (t.v2.x - t.v1.x) / (t.v2.y - t.v1.y);
+	float invslope1 = (t.v2. x - t.v1.x) / (t.v2.y - t.v1.y);
 	float invslope2 = (t.v3.x - t.v1.x) / (t.v3.y - t.v1.y);
 
 	float curx1 = t.v1.x;

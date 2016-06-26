@@ -97,7 +97,7 @@ SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 		printf(" nananaan %s\n", IMG_GetError());
 	}
 
-	auto scaled = ScaleSurface(image, 200, 200);
+	auto scaled = ScaleSurface(image, 250, 250);
 	SDL_FreeSurface(image);
 	image = scaled;
 

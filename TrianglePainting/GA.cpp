@@ -91,4 +91,18 @@ void GA::mutate(Image& image)
 		ix = rnd.getIndex(0, image.triangles.size() - 1);
 		image.triangles[ix] = std::move(rnd.getRandomTriangle(image.surface->w, image.surface->h));
 	}
+
+	int f, s;
+	Triangle temp;
+	count = rnd.getIndex(1, image.triangles.size() / 2);
+	for (int i = 0; i < count; i++)
+	{
+		f = rnd.getIndex(1, image.triangles.size() - 1);
+		s = rnd.getIndex(1, image.triangles.size() - 1);
+
+		temp = image.triangles[f];
+		image.triangles[f] = image.triangles[s];
+		image.triangles[s] = temp;
+	}
+
 }
