@@ -1,7 +1,8 @@
 #pragma once
 #include <random>
 #include "Vector.h"
-std::random_device device;
+
+static std::random_device device;
 
 class Random
 {
