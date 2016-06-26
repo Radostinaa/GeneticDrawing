@@ -53,6 +53,41 @@ bool SDLWrapper::initSDL()
 	return true;
 }
 
+void DrawPixel(SDL_Surface* target, Sint16 x, Sint16 y, Uint32 color) {
+	Uint32 * pixels = (Uint32*)target->pixels;
+	pixels[y * target->w + x] = color;
+}
+
+Uint32 ReadPixel(SDL_Surface* source, Sint16 x, Sint16 y) {
+	Uint32 * pixels = (Uint32 *)source->pixels;
+	return pixels[y * source->w + x];
+}
+
+SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height)
+{
+	if (!Surface || !Width || !Height)
+		return 0;
+
+	SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, Width, Height, Surface->format->BitsPerPixel,
+		Surface->format->Rmask, Surface->format->Gmask, Surface->format->Bmask, Surface->format->Amask);
+
+	double _stretch_factor_x = (static_cast<double>(Width) / static_cast<double>(Surface->w)),
+		   _stretch_factor_y = (static_cast<double>(Height) / static_cast<double>(Surface->h));
+
+	for (Sint32 y = 0; y < Surface->h; y++) {
+		for (Sint32 x = 0; x < Surface->w; x++) {
+			for (Sint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
+				for (Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
+					DrawPixel(_ret, static_cast<Sint32>(_stretch_factor_x * x) + o_x,
+						static_cast<Sint32>(_stretch_factor_y * y) + o_y, ReadPixel(Surface, x, y));
+				}
+			}
+		}
+	}
+
+	return _ret;
+}
+
 SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 {
 	SDL_Surface *image;
@@ -61,6 +96,10 @@ SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 	{
 		printf(" nananaan %s\n", IMG_GetError());
 	}
+
+	auto scaled = ScaleSurface(image, 200, 200);
+	SDL_FreeSurface(image);
+	image = scaled;
 
 
 	SDL_Texture * texture = SDL_CreateTextureFromSurface(render, image);
