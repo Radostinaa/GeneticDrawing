@@ -16,7 +16,7 @@ void GA::fitness(Image& image)
 }
 
 
-Image GA::cross(const Image& mother, const Image& fother)
+Image GA::cross(const Image& mother, const Image& father)
 {
 	Image child(mother.surface->w, mother.surface->h);
 	child.triangles.reserve(trianglesCount);
@@ -28,33 +28,33 @@ Image GA::cross(const Image& mother, const Image& fother)
 
 	int count = 0;
 
+	for (auto & tr : father.triangles)
+	{
+		if (count >= trianglesCount) break;
+		if (isOnRightTriangle(tr, p1, p2))
+		{
+			child.triangles.push_back(tr);
+			count++;
+		}
+	}
+
 	for (auto & tr : mother.triangles)
 	{
 		if (count >= trianglesCount) break;
-		if (isOnRightTriangle(tr, p1, p2))
+		if (!isOnRightTriangle(tr, p1, p2))
 		{
 			child.triangles.push_back(tr);
 			count++;
 		}
 	}
 
-
-	for (auto & tr : fother.triangles)
-	{
-		if (count >= trianglesCount) break;
-		if (isOnRightTriangle(tr, p1, p2))
-		{
-			child.triangles.push_back(tr);
-			count++;
-		}
-	}
 
 	int size = child.triangles.size();
 	if (size < trianglesCount)
 	{
 		for (int i = 0; i < trianglesCount - size; i++)
 		{
-			child.triangles.push_back(mother.triangles[i]);
+			child.triangles.push_back(father.triangles[i]);
 		}
 	}
 

@@ -9,7 +9,7 @@
 class Utils
 {
 public:
-	Utils(int genSize, int trSize): MaxTriangles(trSize), GenSize(genSize)
+	Utils(int genSize, int trSize) : MaxTriangles(trSize), GenSize(genSize)
 	{	}
 
 	std::vector<Image> generation;
@@ -21,7 +21,7 @@ public:
 
 void firstGeneration(int width, int height, Random& rnd, int genSize, int trSize, std::vector<Image>& generation)
 {
-	for (int c = 0; c < genSize; ++c){
+	for (int c = 0; c < genSize; ++c) {
 
 		Image image(width, height);
 
@@ -53,7 +53,7 @@ void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 	int m, f;
 	for (int i = from; i < from + size; i++)
 	{
-		m = ut.rnd.getIndex(1, ut.GenSize-1);
+		m = ut.rnd.getIndex(1, ut.GenSize - 1);
 		f = ut.rnd.getIndex(0, m - 1);
 		newGen.push_back(std::move(ga.cross(ut.generation[m], ut.generation[f])));
 	}
@@ -67,6 +67,14 @@ void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 	}
 }
 
+
+void  getFitness(int from, int size, GA& ga, Utils& ut)
+{
+	for (int i = from; i < from + size; i++)
+	{
+		ga.fitness(ut.generation[i]);
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -86,32 +94,40 @@ int main(int argc, char *argv[])
 	const int hardwareThreads = static_cast<int>(std::thread::hardware_concurrency());
 	int thCount = std::min(64, hardwareThreads != 0 ? hardwareThreads : 1);
 	std::vector<std::thread> threads(thCount);
+	auto sz = ut.GenSize / thCount;
 
 	firstGeneration(original->w, original->h, rnd, ut.GenSize, ut.MaxTriangles, ut.generation);
 
+	std::vector<std::vector<Image>> newGens(thCount);
+	std::vector<Image> newGen;
 	int cg = 0;
 	while (!sdl.Quit())
 	{
 		sdl.clear();
 		sdl.drawImage(original, true);
 
-		//get fitness
-		for (auto &img : ut.generation)
+		for (auto & subGen : newGens)
 		{
-			ga.fitness(img);
+			subGen.clear();
 		}
 
+		//get fitness
+		for (int i = 0; i < thCount; i++)
+		{
+			threads[i] = std::thread(getFitness, i*sz, sz, std::ref(ga), std::ref(ut));
+		}
+		for (int i = 0; i < thCount; i++)
+		{
+			threads[i].join();
+		}
 		sotrGeneration(ut.generation);
 
 		//draw best image
 		sdl.drawImage(ut.generation[0].surface, false);
 
-		std::vector<std::vector<Image>> newGens(thCount);
-
 		for (int i = 0; i < thCount; i++)
 		{
-			auto sz = ut.GenSize / thCount;
-			threads[i] = std::thread(bla, i*(ut.GenSize / thCount), sz, std::ref(newGens[i]), std::ref(ga), std::ref(ut));
+			threads[i] = std::thread(bla, i*sz, sz, std::ref(newGens[i]), std::ref(ga), std::ref(ut));
 		}
 
 		for (int i = 0; i < thCount; i++)
@@ -119,15 +135,14 @@ int main(int argc, char *argv[])
 			threads[i].join();
 		}
 
-		//add the best ones
-		std::vector<Image> newGen;
-		newGen.reserve(ut.GenSize);
-
+		newGen.clear();
 		for (auto & subGen : newGens) {
 			for (auto & img : subGen) {
 				newGen.push_back(std::move(img));
 			}
 		}
+
+		//add the best ones
 		for (int i = 0; i < ut.GenSize / 10; i++)
 		{
 			newGen[i] = std::move(ut.generation[i]);
@@ -139,6 +154,7 @@ int main(int argc, char *argv[])
 		printf("Generation %d\n", cg++);
 	}
 
+	SDL_FreeSurface(original);
 	return 0;
 }
 

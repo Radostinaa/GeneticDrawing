@@ -24,8 +24,8 @@ public:
 
 		i.pixels = nullptr;
 		i.surface = nullptr;
-
 	}
+
 	Image & operator=(Image && o)
 	{
 		std::swap(this->triangles, o.triangles);
