@@ -112,6 +112,7 @@ SDL_Surface* SDLWrapper::drawImageFromPath(char* path)
 
 	SDL_RenderCopy(render, texture, NULL, &rect);
 	update();
+	SDL_DestroyTexture(texture);
 	return image;
 }
 
@@ -128,6 +129,7 @@ void SDLWrapper::drawImage(SDL_Surface *image, bool original)
 
 	SDL_RenderCopy(render, texture, NULL, &rect);
 	update();
+	SDL_DestroyTexture(texture);
 }
 
 void SDLWrapper::drawLine(const Vector2& from, const Vector2& to, const Color& color)
