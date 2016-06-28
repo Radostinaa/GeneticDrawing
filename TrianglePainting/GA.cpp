@@ -63,13 +63,14 @@ Image GA::cross(const Image& mother, const Image& father, std::vector<Triangle>&
 	int size = child.triangles.size();
 	if (size < trianglesCount)
 	{
-		for (int i = 0; i < trianglesCount - size; i++)
+		for (int i = 0; i <= trianglesCount - size; i++)
 		{
 			if (isNotUsed(used, father.triangles[i]))
 				child.triangles.push_back(father.triangles[i]);
 		}
 	}
 
+	if (child.triangles.size() != trianglesCount) __debugbreak();
 	child.generatePixels();
 
 	return child;
