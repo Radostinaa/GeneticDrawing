@@ -21,12 +21,13 @@ Image GA::cross(const Image& mother, const Image& father)
 	Image child(mother.surface->w, mother.surface->h);
 	child.triangles.reserve(trianglesCount);
 
+	// get random line trought the image 
 	Vector2 p1 = rnd.getRandomCoordinate(mother.surface->w, mother.surface->h);
 	Vector2 p2 = rnd.getRandomCoordinate(mother.surface->w, mother.surface->h);
 
 	p2 = p1 == p2 ? Vector2(p1.y, p1.x) : p2;
 
-	int count = 0;
+	int count = 0; // count of triangles added int child
 
 	for (auto & tr : father.triangles)
 	{
@@ -84,6 +85,7 @@ bool GA::isOnRightPint(const Vector2& p1, const Vector2& p2, const Vector2& p3)
 
 void GA::mutate(Image& image)
 {
+	// replace count random triangles from the image with new random ones
 	int count = rnd.getIndex(1, image.triangles.size() - 1);
 	int ix;
 	for (int i = 0; i < count; i++)
@@ -92,6 +94,7 @@ void GA::mutate(Image& image)
 		image.triangles[ix] = std::move(rnd.getRandomTriangle(image.surface->w, image.surface->h));
 	}
 
+	// swaitch count random triangles from thes painting
 	int f, s;
 	Triangle temp;
 	count = rnd.getIndex(1, image.triangles.size() / 2);

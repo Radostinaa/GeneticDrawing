@@ -9,11 +9,11 @@
 class Utils
 {
 public:
-	Utils(int genSize, int trSize) : MaxTriangles(trSize), GenSize(genSize)
+	Utils(int genSize, int trCount) : TrianglesCount(trCount), GenSize(genSize)
 	{	}
 
 	std::vector<Image> generation;
-	int MaxTriangles;
+	int TrianglesCount;
 	int GenSize;
 
 	Random rnd;
@@ -69,25 +69,25 @@ void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 
 int main(int argc, char *argv[])
 {
-	SDLWrapper sdl(1200, 600);
+	SDLWrapper sdl(800, 400);
 	if (!sdl.initSDL())
 	{
 		return -1;
 	}
 
 	Random rnd;
-	Utils ut(40, 40);
+	Utils ut(80, 30);
 
 	SDL_Surface* original = sdl.drawImageFromPath("../Images/cookie_monster.png");
 
-	GA ga(ut.MaxTriangles, original);
+	GA ga(ut.TrianglesCount, original);
 
 	const int hardwareThreads = static_cast<int>(std::thread::hardware_concurrency());
 	int thCount = std::min(64, hardwareThreads != 0 ? hardwareThreads : 1);
 	std::vector<std::thread> threads(thCount);
 	auto sz = ut.GenSize / thCount;
 
-	firstGeneration(original->w, original->h, rnd, ut.GenSize, ut.MaxTriangles, ut.generation);
+	firstGeneration(original->w, original->h, rnd, ut.GenSize, ut.TrianglesCount, ut.generation);
 
 	std::vector<std::vector<Image>> newGens(thCount);
 	std::vector<Image> newGen;

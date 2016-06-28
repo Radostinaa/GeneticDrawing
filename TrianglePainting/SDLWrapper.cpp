@@ -33,7 +33,7 @@ bool SDLWrapper::initSDL()
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
 
-	window = SDL_CreateWindow("nana", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+	window = SDL_CreateWindow("triangle painting", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		width, height, SDL_WINDOW_SHOWN);
 
 	screen = SDL_GetWindowSurface(window);
