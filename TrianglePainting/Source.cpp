@@ -65,7 +65,7 @@ void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 	for (int i = 0; i < size; i++)
 	{
 		k = ut.rnd.getIndex(0, 100);
-		if (k < 5) ga.mutate(newGen[i]);
+		if (k <= 5) ga.mutate(newGen[i]);
 	}
 }
 
