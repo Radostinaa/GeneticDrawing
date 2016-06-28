@@ -50,12 +50,14 @@ void sotrGeneration(std::vector<Image>& generation)
 void bla(int from, int size, std::vector<Image>& newGen, GA& ga, Utils& ut)
 {
 	//cross
+	std::vector<Triangle> used;
 	int m, f;
 	for (int i = from; i < from + size; i++)
 	{
+		used.clear();
 		m = ut.rnd.getIndex(1, ut.GenSize - 1);
 		f = ut.rnd.getIndex(0, m - 1);
-		newGen.push_back(std::move(ga.cross(ut.generation[m], ut.generation[f])));
+		newGen.push_back(std::move(ga.cross(ut.generation[m], ut.generation[f], used)));
 	}
 
 	//mutate
@@ -91,6 +93,7 @@ int main(int argc, char *argv[])
 
 	std::vector<std::vector<Image>> newGens(thCount);
 	std::vector<Image> newGen;
+
 	int cg = 0;
 	while (!sdl.Quit())
 	{

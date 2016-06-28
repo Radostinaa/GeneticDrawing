@@ -13,7 +13,7 @@ public:
 	}
 
 	void fitness(Image& image);
-	Image cross(const Image& mother, const Image& fother);
+	Image cross(const Image& mother, const Image& fother, std::vector<Triangle>& used);
 	void mutate(Image& image);
 	
 

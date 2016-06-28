@@ -15,8 +15,17 @@ void GA::fitness(Image& image)
 	image.fitness = error;
 }
 
+bool isNotUsed(std::vector<Triangle>& used, const Triangle& tr)
+{
+	for (auto &t : used)
+	{
+		if (t == tr) return false;
+	}
+	return true;
+}
 
-Image GA::cross(const Image& mother, const Image& father)
+
+Image GA::cross(const Image& mother, const Image& father, std::vector<Triangle>& used)
 {
 	Image child(mother.surface->w, mother.surface->h);
 	child.triangles.reserve(trianglesCount);
@@ -35,6 +44,7 @@ Image GA::cross(const Image& mother, const Image& father)
 		if (isOnRightTriangle(tr, p1, p2))
 		{
 			child.triangles.push_back(tr);
+			used.push_back(tr);
 			count++;
 		}
 	}
@@ -45,17 +55,18 @@ Image GA::cross(const Image& mother, const Image& father)
 		if (!isOnRightTriangle(tr, p1, p2))
 		{
 			child.triangles.push_back(tr);
+			used.push_back(tr);
 			count++;
 		}
 	}
-
 
 	int size = child.triangles.size();
 	if (size < trianglesCount)
 	{
 		for (int i = 0; i < trianglesCount - size; i++)
 		{
-			child.triangles.push_back(father.triangles[i]);
+			if (isNotUsed(used, father.triangles[i]))
+				child.triangles.push_back(father.triangles[i]);
 		}
 	}
 

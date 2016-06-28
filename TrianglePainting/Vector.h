@@ -37,6 +37,11 @@ inline bool operator <= (const Vector2& a, const Vector2& b)
 	return a.y <= b.y;
 }
 
+inline bool operator != (const Vector2& a, const Vector2& b)
+{
+	return a.y != b.y || a.x != b.x ;
+}
+
 
 inline bool operator >= (const Vector2& a, const Vector2& b)
 {
@@ -107,6 +112,11 @@ inline Color operator / (const Color& a, int divider)
 	return Color(a.r / divider, a.g / divider, a.b / divider, a.a / divider);
 }
 
+inline bool operator != (const Color& a, const Color& b)
+{
+	return a.a != b.a || a.r != b.r || a.g != b.g || a.b != b.b;
+}
+
 inline double Colorfitness(Color c1, Color c2)
 {
 	double r = c1.r - c2.r;
@@ -135,3 +145,11 @@ struct Triangle
 		}
 	}
 };
+
+inline bool operator == (const Triangle& f, const Triangle& s)
+{
+	if (f.v1 != s.v1 || f.v2 != s.v2 || f.v3 != s.v3) return false;
+	if (f.color != s.color) return false;
+
+	return true;
+}
