@@ -75,6 +75,8 @@ Image GA::cross(const Image& mother, const Image& father, std::vector<Triangle>&
 	}
 
 	if (child.triangles.size() != trianglesCount) __debugbreak();
+
+	//draw image pixels
 	child.generatePixels();
 
 	return child;
@@ -123,5 +125,6 @@ void GA::mutate(Image& image)
 		image.triangles[f] = image.triangles[s];
 		image.triangles[s] = temp;
 	}
-
+	//draw image pixels
+	image.generatePixels();
 }
