@@ -70,6 +70,7 @@ void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
 
 SDL_Surface* Image::generatePixels()
 {
+	memset(pixels, 0, (this->surface->w) * (this->surface->h));
 	for (auto tr : triangles)
 	{
 		drawTirangle(tr);
