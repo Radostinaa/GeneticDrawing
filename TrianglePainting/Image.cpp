@@ -72,7 +72,7 @@ SDL_Surface* Image::generatePixels()
 {
 	//Color c1(pixels[0]);
 
-	Color c(255, 0, 0, 255);
+	Color c(0, 0, 0, 255);
 	for (int i = 0; i < (this->surface->w) * (this->surface->h); ++i)
 	{
 		pixels[i] = (Uint32)c;
