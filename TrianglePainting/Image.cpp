@@ -23,17 +23,17 @@ Uint32 Image::calcPixel(Uint32* pixels, int x, int y, Color color)
 {
 	Uint32 * dest = &pixels[(y * (surface->w)) + x];
 	*dest = *((Color*)dest) + color;
-	return *dest ;
+	return *dest;
 }
 
 //bresenham line
 void Image::drawLine(const Vector2& from, const Vector2& to, const Color& color) {
-	
+
 	Vector2 f(from);
 
 	float dx = abs(to.x - f.x), sx = f.x < to.x ? 1 : -1;
 	float dy = abs(to.y - f.y), sy = f.y < to.y ? 1 : -1;
-	float err = (dx>dy ? dx : -dy) / 2;
+	float err = (dx > dy ? dx : -dy) / 2;
 
 	while (true) {
 		pixels[((int)f.y * (surface->w)) + (int)f.x] = calcPixel(pixels, f.x, f.y, color);
@@ -70,7 +70,14 @@ void sortVerticesAscendingByY(Vector2& v1, Vector2& v2, Vector2& v3)
 
 SDL_Surface* Image::generatePixels()
 {
-	memset(pixels, 0, (this->surface->w) * (this->surface->h));
+	//Color c1(pixels[0]);
+
+	Color c(255, 0, 0, 255);
+	for (int i = 0; i < (this->surface->w) * (this->surface->h); ++i)
+	{
+		pixels[i] = (Uint32)c;
+	}
+
 	for (auto tr : triangles)
 	{
 		drawTirangle(tr);
@@ -102,7 +109,7 @@ void Image::drawTirangle(Triangle t)
 
 void Image::fillBottomFlatTriangle(const Triangle& t)
 {
-	float invslope1 = (t.v2. x - t.v1.x) / (t.v2.y - t.v1.y);
+	float invslope1 = (t.v2.x - t.v1.x) / (t.v2.y - t.v1.y);
 	float invslope2 = (t.v3.x - t.v1.x) / (t.v3.y - t.v1.y);
 
 	float curx1 = t.v1.x;
