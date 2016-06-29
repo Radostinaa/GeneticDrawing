@@ -75,6 +75,13 @@ public:
 		Uint32 val = *(Uint32*)this;
 		return val;
 	}
+	Color(Uint32& u)
+	{
+		r = (u & 0x000000ff);
+		g = (u & 0x0000ff00) >> 8;
+		b = (u & 0x00ff0000) >> 16;
+		a = (u & 0xff000000) >> 24;
+	}
 };
 
 
