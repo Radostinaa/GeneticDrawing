@@ -31,6 +31,7 @@ void firstGeneration(int width, int height, Random& rnd, int genSize, int trSize
 			image.triangles.push_back(tr);
 		}
 
+		//draw image pixels
 		image.generatePixels();
 
 		generation.push_back(std::move(image));
@@ -133,10 +134,19 @@ int main(int argc, char *argv[])
 		}
 
 		//add the best ones
-		for (int i = 0; i < ut.GenSize / 10; i++)
+		for (int i = 0; i < ut.GenSize / 20; i++)
 		{
 			newGen[i] = std::move(ut.generation[i]);
 		}
+		for (int i = 0; i < ut.GenSize / 20; i++)
+		{
+			Image copy(newGen[i].surface->w, newGen[i].surface->h);
+			copy.triangles = newGen[i].triangles;
+			copy.generatePixels();			//draw image pixels
+
+			newGen[i + ut.GenSize / 20 - 1] = std::move(copy);
+		}
+
 		ut.generation.swap(newGen);
 
 		sdl.checkForEvent();
