@@ -11,6 +11,14 @@ public:
 	std::vector<Triangle> triangles;
 	double fitness;
 
+    inline bool inBounds(int x, int y) {
+        return x > 0 && y > 0 && x < surface->w && y < surface->h;
+    }
+
+
+    Image() : surface(nullptr), pixels(nullptr), fitness(0) {}
+
+
 	Image(int _width, int _height);
 	~Image();
 	SDL_Surface* generatePixels();

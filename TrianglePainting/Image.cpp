@@ -115,7 +115,7 @@ void Image::fillBottomFlatTriangle(const Triangle& t)
 	float curx1 = t.v1.x;
 	float curx2 = t.v1.x;
 
-	for (int scanlineY = t.v1.y; scanlineY <= t.v2.y; scanlineY++)
+	for (int scanlineY = t.v1.y; scanlineY <= t.v2.y && inBounds(curx1, scanlineY) && inBounds(curx2, scanlineY); scanlineY++)
 	{
 		drawLine(Vector2((int)curx1, scanlineY), Vector2((int)curx2, scanlineY), t.color);
 		curx1 += invslope1;
@@ -130,7 +130,7 @@ void Image::fillTopFlatTriangle(const Triangle& t)
 	float curx1 = t.v3.x;
 	float curx2 = t.v3.x;
 
-	for (int scanlineY = t.v3.y; scanlineY > t.v1.y; scanlineY--)
+	for (int scanlineY = t.v3.y; scanlineY > t.v1.y && inBounds(curx1, scanlineY) && inBounds(curx2, scanlineY); scanlineY--)
 	{
 		drawLine(Vector2((int)curx1, scanlineY), Vector2((int)curx2, scanlineY), t.color);
 		curx1 -= invslope1;
